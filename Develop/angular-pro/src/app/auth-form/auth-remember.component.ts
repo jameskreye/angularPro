@@ -7,6 +7,8 @@ import { Component, Output, EventEmitter } from '@angular/core';
     template: `
     <label>
         <input type="checkbox" (change)="onChecked($event.target.checked)">
+        keep me logged in
+        
     </label>
     `
 })
