@@ -2,7 +2,7 @@
 import { AuthRememberComponent } from './auth-remember.component';
 import { AuthMessageComponent } from './auth-message.component';
 
-import { Component, Output, EventEmitter, ViewChild, AfterViewInit, ContentChildren, QueryList, AfterContentInit, ChangeDetectorRef } from '@angular/core';
+import { Component, Output, EventEmitter, ViewChild, AfterViewInit, ContentChildren, QueryList, AfterContentInit, ChangeDetectorRef, ViewChildren } from '@angular/core';
 
 import { User } from './auth-form.interface';
 
@@ -22,6 +22,8 @@ import { User } from './auth-form.interface';
         </label>
         <ng-content select="auth-remember"></ng-content>
         <auth-message [style.display]="(showMessage ? 'inherit' : 'none')"></auth-message>
+        <auth-message [style.display]="(showMessage ? 'inherit' : 'none')"></auth-message>
+        <auth-message [style.display]="(showMessage ? 'inherit' : 'none')"></auth-message>
         <ng-content select="button"></ng-content>
       </form>
     </div>
@@ -31,7 +33,7 @@ export class AuthFormComponent implements AfterContentInit, AfterViewInit {
 
   showMessage: boolean;
 
-  @ViewChild(AuthMessageComponent) message: AuthMessageComponent;
+  @ViewChildren(AuthMessageComponent) message: QueryList<AuthMessageComponent>;
 
   //read the children of AuthRememberComponent, each queryList item is of type component
   @ContentChildren(AuthRememberComponent) remember: QueryList<AuthRememberComponent>;
@@ -43,11 +45,15 @@ export class AuthFormComponent implements AfterContentInit, AfterViewInit {
   
 
   ngAfterViewInit() {
-    console.log('message before: ', this.message.days)
+    
+    // check if there is a message, then loop through them to mutate the days for each after the was init...
     if(this.message) {
-      this.message.days = 30;
+      this.message.forEach((message) => {
+        message.days = 25;
+      });
     }
 
+    // this is needed because angular do the additional check when the app is running on dev mode
     this.cd.detectChanges()
     
   }
@@ -62,7 +68,6 @@ export class AuthFormComponent implements AfterContentInit, AfterViewInit {
   }
 
   onSubmit(value: User) {
-    console.log(this.message.days)
     this.submitted.emit(value);
   }
 
