@@ -2,27 +2,28 @@
 import { AuthRememberComponent } from './auth-remember.component';
 import { AuthMessageComponent } from './auth-message.component';
 
-import { Component, Output, EventEmitter, ViewChild, AfterViewInit, ContentChildren, QueryList, AfterContentInit, ChangeDetectorRef, ViewChildren } from '@angular/core';
+import { Component, Output, EventEmitter, ViewChild, AfterViewInit, ContentChildren, QueryList, AfterContentInit, ChangeDetectorRef, ViewChildren, ElementRef } from '@angular/core';
 
 import { User } from './auth-form.interface';
 
 @Component({
   selector: 'auth-form',
+  styles: [
+    `.email { border-color: #9f72e6 }`
+  ],
   template: `
     <div>
       <form (ngSubmit)="onSubmit(form.value)" #form="ngForm">
         <ng-content select="h3"></ng-content>
         <label>
           Email address
-          <input type="email" name="email" ngModel>
+          <input type="email" name="email" ngModel #email>
         </label>
         <label>
           Password
           <input type="password" name="password" ngModel>
         </label>
         <ng-content select="auth-remember"></ng-content>
-        <auth-message [style.display]="(showMessage ? 'inherit' : 'none')"></auth-message>
-        <auth-message [style.display]="(showMessage ? 'inherit' : 'none')"></auth-message>
         <auth-message [style.display]="(showMessage ? 'inherit' : 'none')"></auth-message>
         <ng-content select="button"></ng-content>
       </form>
@@ -40,11 +41,22 @@ export class AuthFormComponent implements AfterContentInit, AfterViewInit {
 
   @Output() submitted: EventEmitter<User> = new EventEmitter<User>();
 
+  @ViewChild('email') email: ElementRef;
+
   constructor(private cd: ChangeDetectorRef ){}
 
   
 
   ngAfterViewInit() {
+
+    //set the place holder of this input to 'Enter ur email'
+    this.email.nativeElement.setAttribute('placeholder','Enter ur email');
+
+    //adds color to the border
+    this.email.nativeElement.classList.add('email');
+
+    // add focus to the input after reloading, means that the mousse thing will be in this input
+    this.email.nativeElement.focus();
     
     // check if there is a message, then loop through them to mutate the days for each after the was init...
     if(this.message) {
