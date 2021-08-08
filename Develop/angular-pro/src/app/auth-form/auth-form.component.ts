@@ -2,7 +2,7 @@
 import { AuthRememberComponent } from './auth-remember.component';
 import { AuthMessageComponent } from './auth-message.component';
 
-import { Component, Output, EventEmitter, ViewChild, AfterViewInit, ContentChildren, QueryList, AfterContentInit, ChangeDetectorRef, ViewChildren, ElementRef } from '@angular/core';
+import { Component, Output, EventEmitter, ViewChild, AfterViewInit, ContentChildren, QueryList, AfterContentInit, ChangeDetectorRef, ViewChildren, ElementRef, Renderer2} from '@angular/core';
 
 import { User } from './auth-form.interface';
 
@@ -43,20 +43,29 @@ export class AuthFormComponent implements AfterContentInit, AfterViewInit {
 
   @ViewChild('email') email: ElementRef;
 
-  constructor(private cd: ChangeDetectorRef ){}
+  constructor(
+    private cd: ChangeDetectorRef,
+    private renderer: Renderer2
+    ){}
 
   
 
   ngAfterViewInit() {
 
+    // the same is implemented with Renderer2
+
     //set the place holder of this input to 'Enter ur email'
-    this.email.nativeElement.setAttribute('placeholder','Enter ur email');
+    this.renderer.setAttribute(this.email.nativeElement, 'placeholder', 'Enter ur email');
+    //this.email.nativeElement.setAttribute('placeholder','Enter ur email');
+
 
     //adds color to the border
-    this.email.nativeElement.classList.add('email');
+    this.renderer.addClass(this.email.nativeElement, 'email')
+    //this.email.nativeElement.classList.add('email');
 
     // add focus to the input after reloading, means that the mousse thing will be in this input
-    this.email.nativeElement.focus();
+    this.renderer.selectRootElement(this.email.nativeElement).focus();
+    //this.email.nativeElement.focus();
     
     // check if there is a message, then loop through them to mutate the days for each after the was init...
     if(this.message) {
