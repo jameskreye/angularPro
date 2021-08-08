@@ -1,5 +1,8 @@
+
 import { AuthRememberComponent } from './auth-remember.component';
-import { Component, Output, EventEmitter, ContentChildren, QueryList, AfterContentInit } from '@angular/core';
+import { AuthMessageComponent } from './auth-message.component';
+
+import { Component, Output, EventEmitter, ViewChild, AfterViewInit, ContentChildren, QueryList, AfterContentInit, ChangeDetectorRef } from '@angular/core';
 
 import { User } from './auth-form.interface';
 
@@ -9,7 +12,6 @@ import { User } from './auth-form.interface';
     <div>
       <form (ngSubmit)="onSubmit(form.value)" #form="ngForm">
         <ng-content select="h3"></ng-content>
-        <ng-content select="h2"></ng-content>
         <label>
           Email address
           <input type="email" name="email" ngModel>
@@ -19,31 +21,49 @@ import { User } from './auth-form.interface';
           <input type="password" name="password" ngModel>
         </label>
         <ng-content select="auth-remember"></ng-content>
-        <div *ngIf="showMessage">
-          You will be logged in for 30 days
-        </div>
+        <auth-message [style.display]="(showMessage ? 'inherit' : 'none')"></auth-message>
         <ng-content select="button"></ng-content>
       </form>
     </div>
   `
 })
-export class AuthFormComponent implements AfterContentInit {
+export class AuthFormComponent implements AfterContentInit, AfterViewInit {
 
   showMessage: boolean;
+
+  @ViewChild(AuthMessageComponent) message: AuthMessageComponent;
 
   //read the children of AuthRememberComponent, each queryList item is of type component
   @ContentChildren(AuthRememberComponent) remember: QueryList<AuthRememberComponent>;
 
   @Output() submitted: EventEmitter<User> = new EventEmitter<User>();
 
-  onSubmit(value: User) {
-    this.submitted.emit(value);
+  constructor(private cd: ChangeDetectorRef ){}
+
+  
+
+  ngAfterViewInit() {
+    console.log('message before: ', this.message.days)
+    if(this.message) {
+      this.message.days = 30;
+    }
+
+    this.cd.detectChanges()
+    
   }
 
+/* This lifecycle hook is called after the content has been projected */
   ngAfterContentInit() {
+
     if(this.remember) {
-        this.remember.forEach(( item ) => item.checked.subscribe((checked: boolean) => this.showMessage = checked));
+      this.remember.forEach(( item ) => item.checked.subscribe((checked: boolean) => this.showMessage = checked));
+
     }
+  }
+
+  onSubmit(value: User) {
+    console.log(this.message.days)
+    this.submitted.emit(value);
   }
 
 }
