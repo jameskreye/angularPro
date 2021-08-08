@@ -2,7 +2,7 @@
 import { AuthRememberComponent } from './auth-remember.component';
 import { AuthMessageComponent } from './auth-message.component';
 
-import { Component, Output, EventEmitter, ViewChild, AfterViewInit, ContentChildren, QueryList, AfterContentInit, ChangeDetectorRef, ViewChildren, ElementRef, Renderer2} from '@angular/core';
+import { Component, Output, EventEmitter} from '@angular/core';
 
 import { User } from './auth-form.interface';
 
@@ -14,81 +14,36 @@ import { User } from './auth-form.interface';
   template: `
     <div>
       <form (ngSubmit)="onSubmit(form.value)" #form="ngForm">
-        <ng-content select="h3"></ng-content>
+        <h3>{{title}}</h3>
         <label>
           Email address
-          <input type="email" name="email" ngModel #email>
+          <input type="email" name="email" ngModel>
         </label>
         <label>
           Password
           <input type="password" name="password" ngModel>
         </label>
-        <ng-content select="auth-remember"></ng-content>
-        <auth-message [style.display]="(showMessage ? 'inherit' : 'none')"></auth-message>
-        <ng-content select="button"></ng-content>
+       <button type="submit">
+         {{title}}
+       </button>
       </form>
     </div>
   `
 })
-export class AuthFormComponent implements AfterContentInit, AfterViewInit {
+export class AuthFormComponent {
 
-  showMessage: boolean;
-
-  @ViewChildren(AuthMessageComponent) message: QueryList<AuthMessageComponent>;
-
-  //read the children of AuthRememberComponent, each queryList item is of type component
-  @ContentChildren(AuthRememberComponent) remember: QueryList<AuthRememberComponent>;
+  title = 'login'
 
   @Output() submitted: EventEmitter<User> = new EventEmitter<User>();
 
-  @ViewChild('email') email: ElementRef;
-
   constructor(
-    private cd: ChangeDetectorRef,
-    private renderer: Renderer2
     ){}
 
   
 
-  ngAfterViewInit() {
-
-    // the same is implemented with Renderer2
-
-    //set the place holder of this input to 'Enter ur email'
-    this.renderer.setAttribute(this.email.nativeElement, 'placeholder', 'Enter ur email');
-    //this.email.nativeElement.setAttribute('placeholder','Enter ur email');
-
-
-    //adds color to the border
-    this.renderer.addClass(this.email.nativeElement, 'email')
-    //this.email.nativeElement.classList.add('email');
-
-    // add focus to the input after reloading, means that the mousse thing will be in this input
-    this.renderer.selectRootElement(this.email.nativeElement).focus();
-    //this.email.nativeElement.focus();
-    
-    // check if there is a message, then loop through them to mutate the days for each after the was init...
-    if(this.message) {
-      this.message.forEach((message) => {
-        message.days = 25;
-      });
-    }
-
-    // this is needed because angular do the additional check when the app is running on dev mode
-    this.cd.detectChanges()
-    
-  }
-
-/* This lifecycle hook is called after the content has been projected */
-  ngAfterContentInit() {
-
-    if(this.remember) {
-      this.remember.forEach(( item ) => item.checked.subscribe((checked: boolean) => this.showMessage = checked));
-
-    }
-  }
 
   onSubmit(value: User) {
+    console.log('sub values: ', value)
     this.submitted.emit(value);
   }
 

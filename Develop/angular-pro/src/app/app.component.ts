@@ -1,4 +1,5 @@
-import { Component } from '@angular/core';
+import { Component, ComponentFactoryResolver, ViewChild, ViewContainerRef, AfterContentInit, AfterViewInit, ChangeDetectorRef } from '@angular/core';
+import { AuthFormComponent } from './auth-form/auth-form.component';
 
 import { User } from './auth-form/auth-form.interface';
 
@@ -13,31 +14,33 @@ import { User } from './auth-form/auth-form.interface';
           Join us
         </button>
       </auth-form> -->
-      <auth-form 
-        (submitted)="loginUser($event)">
-        <h3>Login</h3>
-        <auth-remember (checked)="rememberUser($event)"></auth-remember>
-        <button type="submit">
-          Login
-        </button>
-      </auth-form>
+      <div #entry></div>
     </div>
   `
 })
-export class AppComponent {
+export class AppComponent implements AfterViewInit{
 
-  rememberMe:boolean = false;
+  //to communicate to that piece here in the DOM
+  @ViewChild('entry', {read: ViewContainerRef}) entry: ViewContainerRef
+
+  constructor(
+    private resolver: ComponentFactoryResolver,
+    private cd: ChangeDetectorRef
+  ){}
   
-  rememberUser(remember: boolean) {
-    this.rememberMe = remember;
-  }
-
-  createUser(user: User) {
-    console.log('Create account', user);
-  }
 
   loginUser(user: User) {
-    console.log('Login', user, this.rememberMe);
+    console.log('Login', user);
+  }
+
+  ngAfterViewInit() {
+    const authFormFactory = this.resolver.resolveComponentFactory(AuthFormComponent);
+
+    // create the actual component and place it in entry placeholder.
+    const component = this.entry.createComponent(authFormFactory);
+    
+
+    this.cd.detectChanges();
   }
 
 
