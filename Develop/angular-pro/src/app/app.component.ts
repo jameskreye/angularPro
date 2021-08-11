@@ -29,19 +29,20 @@ export class AppComponent implements AfterViewInit{
   ){}
   
 
-  loginUser(user: User) {
-    console.log('Login', user);
-  }
-
   ngAfterViewInit() {
     const authFormFactory = this.resolver.resolveComponentFactory(AuthFormComponent);
 
     // create the actual component and place it in entry placeholder.
     const component = this.entry.createComponent(authFormFactory);
     component.instance.title = 'Create account'; //overriding the actual value of title, so it can be dynamic
+    component.instance.submitted.subscribe(this.loginUser) // subscribing to the output from the AuthFormComponent class.
     
 
     this.cd.detectChanges();
+  }
+
+  loginUser(user: User) {
+    console.log('Login', user);
   }
 
 

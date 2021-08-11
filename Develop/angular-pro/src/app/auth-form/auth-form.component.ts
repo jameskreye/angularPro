@@ -43,7 +43,6 @@ export class AuthFormComponent {
 
 
   onSubmit(value: User) {
-    console.log('sub values: ', value)
     this.submitted.emit(value);
   }
 
