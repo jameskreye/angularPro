@@ -38,6 +38,7 @@ export class AppComponent implements AfterViewInit{
 
     // create the actual component and place it in entry placeholder.
     const component = this.entry.createComponent(authFormFactory);
+    component.instance.title = 'Create account'; //overriding the actual value of title, so it can be dynamic
     
 
     this.cd.detectChanges();
