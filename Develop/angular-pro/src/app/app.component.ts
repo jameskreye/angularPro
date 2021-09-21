@@ -18,8 +18,8 @@ import { User } from './auth-form/auth-form.interface';
       </auth-form> -->
       
       <div #entry></div>
-      <ng-template #tmpl>
-        Jameson Lamour: Santiago CL
+      <ng-template #tmpl let-name let-location="location">
+        {{name}} : {{location}}
       </ng-template>
     </div>
   `
@@ -32,10 +32,23 @@ export class AppComponent implements AfterViewInit{
 
   @ViewChild('tmpl') tmpl: TemplateRef<any>;
 
+  constructor(
+    private resolver: ComponentFactoryResolver,
+    private cd: ChangeDetectorRef
+  ){}
 
   ngAfterViewInit() {
     
-    this.entry.createEmbeddedView(this.tmpl);
+      // this behaves like the *ngFor of angular, thats how it passes the index, odd etc...
+    this.entry.createEmbeddedView(this.tmpl, {
+      //passing the context
+      $implicit: ' Jameson Lamour', // the implicit can be referenced by any name in the template
+      location: 'Santiago CL'
+    });
+
+    this.cd.detectChanges();
   }
+
+  
 
 }
