@@ -6,22 +6,39 @@ import { User } from './auth-form/auth-form.interface';
 @Component({
   selector: 'app-root',
   template: `
-
+      <button (click)="addProp()">Add property</button>
+      <button (click)="changeUser()">Change user object</button>
+      <button (click)="changeName()">Change name property</button>
     <div>
-      
-      <ng-container 
-      [ngTemplateOutlet]="tmpl"
-      [ngTemplateOutletContext]="ctx"></ng-container>
-      <ng-template #tmpl let-name let-location="location">
-      {{name}} : {{location}}
-      </ng-template>
+     
+      <div class="users">
+        <example-one [user]="user"></example-one>
+        <example-two [user]="user"></example-two>
+      </div>
     </div>
   `
 })
 export class AppComponent{
 
-  ctx = {
-    $implicit: 'Jameson Lamour',
-    location: 'Santiago CL'
+  user: any = {
+    name: 'Mark Hoppus',
+    age: 44,
+    location: 'California'
+  };
+
+  addProp() {
+    this.user.email = 'blink@blink-182.net';
+  }
+
+  changeName() {
+    this.user.name = 'Travis Barker';
+  }
+
+  changeUser() {
+    this.user = {
+      name: 'Tom Delonge',
+      age: 41,
+      location: 'California'
+    };
   }
 }
