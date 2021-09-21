@@ -7,7 +7,8 @@ import { User } from './auth-form/auth-form.interface';
   selector: 'app-root',
   template: `
   
-  <button (click)="destroyComponent()">Destroy</button>
+  <button (click)="destroyComponent()" style="margin-left: 15px;">Destroy</button>
+  <button (click)="moveComponent()" style="margin-left: 15px;">Move</button>
     <div>
       
       <!-- <auth-form 
@@ -38,8 +39,9 @@ export class AppComponent implements AfterViewInit{
   ngAfterViewInit() {
     const authFormFactory = this.resolver.resolveComponentFactory(AuthFormComponent);
 
+    this.entry.createComponent(authFormFactory); // this one now has index -1 by default
     // create the actual component and place it in entry placeholder.
-    this.component = this.entry.createComponent(authFormFactory);
+    this.component = this.entry.createComponent(authFormFactory, 0); // can pass the index to order it just like javascript array
     this.component.instance.title = 'Create account'; //overriding the actual value of title, so it can be dynamic
     this.component.instance.submitted.subscribe(this.loginUser) // subscribing to the output from the AuthFormComponent class.
     
@@ -53,6 +55,10 @@ export class AppComponent implements AfterViewInit{
 
   destroyComponent() {
     this.component.destroy();
+  }
+
+  moveComponent() {
+    this.entry.move(this.component.hostView, 1)
   }
 
 
