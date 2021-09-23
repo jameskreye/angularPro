@@ -1,3 +1,4 @@
+import { CreditCardDirective } from './credit-card/credit-card.directive';
 import { ExampleOneComponent } from './one/one.component';
 import { NgModule } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
@@ -11,7 +12,8 @@ import { ExampleTwoComponent } from './two/two.component';
   declarations: [
     AppComponent,
     ExampleOneComponent,
-    ExampleTwoComponent
+    ExampleTwoComponent,
+    CreditCardDirective
   ],
   imports: [
     BrowserModule,
