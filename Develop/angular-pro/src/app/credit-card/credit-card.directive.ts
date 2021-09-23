@@ -1,12 +1,12 @@
-import { Directive, HostListener, ElementRef, HostBinding } from '@angular/core';
+import { Directive, HostListener, HostBinding, ElementRef } from '@angular/core';
 
 @Directive({
   selector: '[credit-card]'
 })
 export class CreditCardDirective {
 
-  @HostBinding('style.border') // to comunicate to the host element
-  border: string
+  @HostBinding('class.border')
+  border: string;
 
   @HostListener('input', ['$event'])
   onKeyDown(event: KeyboardEvent) {

@@ -1,3 +1,4 @@
+import { TooltipDirective } from './tooltip/tooltip.directive';
 import { CreditCardDirective } from './credit-card/credit-card.directive';
 import { ExampleOneComponent } from './one/one.component';
 import { NgModule } from '@angular/core';
@@ -13,7 +14,8 @@ import { ExampleTwoComponent } from './two/two.component';
     AppComponent,
     ExampleOneComponent,
     ExampleTwoComponent,
-    CreditCardDirective
+    CreditCardDirective,
+    TooltipDirective
   ],
   imports: [
     BrowserModule,
