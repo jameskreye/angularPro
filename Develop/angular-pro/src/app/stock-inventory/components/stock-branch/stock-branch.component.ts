@@ -6,7 +6,7 @@ import { FormGroup } from '@angular/forms';
   styleUrls: ['stock-branch.component.scss'],
   template: `
     <div [formGroup]="parent">
-       <div formGroupName="store">  <!--this here makes reference to the model defined in the parent TS, which is the source of truth -->
+      <div formGroupName="store">
         <input 
           type="text" 
           placeholder="Branch ID"
