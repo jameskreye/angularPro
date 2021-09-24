@@ -1,34 +1,29 @@
-import { Component, ComponentFactoryResolver, ViewChild, ViewContainerRef, AfterContentInit, AfterViewInit, ChangeDetectorRef, ComponentRef, TemplateRef } from '@angular/core';
-import { AuthFormComponent } from './auth-form/auth-form.component';
+import { Component, OnInit } from '@angular/core';
 
-import { User } from './auth-form/auth-form.interface';
+interface File {
+  name: string,
+  size: number,
+  type: string
+}
 
 @Component({
   selector: 'app-root',
   template: `
-      <div>
-      <label>
-        Credit Card Number
-        <input 
-          name="credit-card" 
-          type="text"
-          placeholder="Enter your 16-digit card number"
-          credit-card>
-      </label>
-      <label 
-        tooltip="3 digits, back of your card"
-        #myTooltip="tooltip">
-        Enter your security code 
-        <span
-          (mouseover)="myTooltip.show()"
-          (mouseout)="myTooltip.hide()">
-          (?)
-        </span>
-        <input type="text">
-      </label>
+    <div>
+      <div *ngFor="let file of files">
+        <p>{{ file.name }}</p>
+        <p>{{ file.size | filesize:' Megabyte' }}</p>
+      </div>
     </div>
   `
 })
-export class AppComponent{
-
+export class AppComponent implements OnInit {
+  files: File[];
+  ngOnInit() {
+    this.files = [
+      { name: 'logo.svg', size: 2120109, type: 'image/svg' },
+      { name: 'banner.jpg', size: 18029, type: 'image/jpg' },
+      { name: 'background.png', size: 1784562, type: 'image/png' }
+    ];
+  }
 }
