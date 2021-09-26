@@ -34,13 +34,13 @@ import { FormGroup, FormArray } from '@angular/forms';
 })
 export class StockProductsComponent {
   @Input()
-  parent: FormGroup; // the value for the stock-selector form from the parent
+  parent: FormGroup;
 
   @Output()
-  removed = new EventEmitter<any>(); 
+  removed = new EventEmitter<any>();
 
   onRemove(group, index) {
-    this.removed.emit({ group, index }); // send the group and the it index from the arrayForm to the parent 
+    this.removed.emit({ group, index });
   }
 
   get stocks() {

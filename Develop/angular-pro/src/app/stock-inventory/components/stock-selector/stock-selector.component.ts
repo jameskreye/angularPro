@@ -34,17 +34,15 @@ import { Product } from '../../models/product.interface';
 })
 export class StockSelectorComponent {
   @Input()
-  parent: FormGroup; // data passed by the parent
+  parent: FormGroup;
   
   @Input()
-  products: Product[]; // data passed by the parent
+  products: Product[];
 
   @Output()
   added = new EventEmitter<any>();
 
-  // when a stock is added it sends an event to the parent with actual value
-  // parent receive the value and update the stock produt array. 
   onAdd() {
-    this.added.emit(this.parent.get('selector').value); 
+    this.added.emit(this.parent.get('selector').value);
   }
 }

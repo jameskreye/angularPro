@@ -1,5 +1,5 @@
 import { Component } from '@angular/core';
-import { FormControl, FormGroup, FormArray } from '@angular/forms';
+import { FormBuilder, FormGroup, FormArray } from '@angular/forms';
 
 import { Product } from '../../models/product.interface';
 
@@ -49,35 +49,34 @@ export class StockInventoryComponent {
     { "id": 5, "price": 600, "name": "Apple Watch" },
   ];
 
-  form = new FormGroup({
-    store: new FormGroup({
-      branch: new FormControl(''),
-      code: new FormControl('')
+  form = this.fb.group({
+    store: this.fb.group({
+      branch: '',
+      code: ''
     }),
     selector: this.createStock({}),
-    stock: new FormArray([
+    stock: this.fb.array([
       this.createStock({ product_id: 1, quantity: 10 }),
       this.createStock({ product_id: 3, quantity: 50 }),
     ])
   })
 
-  // creates stock dinamically 
+  constructor(
+    private fb: FormBuilder
+  ) {}
+
   createStock(stock) {
-    return new FormGroup({
-      product_id: new FormControl(parseInt(stock.product_id, 10) || ''),
-      quantity: new FormControl(stock.quantity || 10)
+    return this.fb.group({
+      product_id: parseInt(stock.product_id, 10) || '',
+      quantity: stock.quantity || 10
     });
   }
 
-  // receive the event from the stockSelectorComponent, get the stock FormGroup as FormArray
-  // creates a stock with the event/value passed from the child and push it to the stock FormArray
   addStock(stock) {
     const control = this.form.get('stock') as FormArray;
     control.push(this.createStock(stock));
   }
 
-  // receives the group & index from the stockProductComponent, get the stock FormGroup as FormArray
-  // and remove with the group of the passed index using this method of the FormArray
   removeStock({ group, index }: { group: FormGroup, index: number }) {
     const control = this.form.get('stock') as FormArray;
     control.removeAt(index);
