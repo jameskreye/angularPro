@@ -1,9 +1,14 @@
+import { MailModule } from './mail/mail.module';
+import { HttpClientModule } from '@angular/common/http';
 import { NgModule } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
-
-import { StockInventoryModule } from './stock-inventory/stock-inventory.module';
+import { RouterModule, Routes } from '@angular/router';
 
 import { AppComponent } from './app.component';
+
+export const ROUTES: Routes = [
+  { path: '**', redirectTo: 'folder/inbox' }
+];
 
 @NgModule({
   declarations: [
@@ -11,7 +16,9 @@ import { AppComponent } from './app.component';
   ],
   imports: [
     BrowserModule,
-    StockInventoryModule
+    HttpClientModule,
+    MailModule,
+    RouterModule.forRoot(ROUTES)
   ],
   bootstrap: [
     AppComponent
